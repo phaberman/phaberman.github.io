@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phillip Haberman — Analytics Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0e0f11;
+      --bg2:        #161719;
+      --bg3:        #1e2023;
+      --border:     #2a2c30;
+      --muted:      #5a5d66;
+      --subtle:     #8b8f99;
+      --body:       #c8cad0;
+      --head:       #edeef2;
+      --accent:     #4ade80;
+      --accent2:    #22d3ee;
+      --tag-bg:     #1a2e1f;
+      --tag-color:  #4ade80;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--body);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      background: rgba(14,15,17,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--subtle);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--head); }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 0; }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.35;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 100%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      color: var(--head);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.25s;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--subtle);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.55s;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.4rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0e0f11;
+      font-weight: 500;
+      border: 1px solid var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--subtle);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--subtle);
+      color: var(--head);
+    }
+
+    .hero-stack {
+      margin-top: 4rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.7s;
+    }
+
+    .stack-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .stack-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pill {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 3px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--subtle);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--head);
+      line-height: 1.15;
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { border-top: 1px solid var(--border); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--subtle);
+      margin-bottom: 1rem;
+      font-size: 0.97rem;
+    }
+
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .stat-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── PROJECT ── */
+    #projects { border-top: 1px solid var(--border); }
+
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .project-card:hover { border-color: var(--accent); }
+
+    .project-header {
+      padding: 2rem 2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 1.05rem;
+      color: var(--head);
+      letter-spacing: -0.01em;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .project-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--subtle);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.7rem;
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+
+    .project-links a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--subtle);
+      line-height: 1.75;
+    }
+
+    .project-body {
+      padding: 1.5rem 2rem 2rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 3px;
+      background: var(--tag-bg);
+      color: var(--tag-color);
+      letter-spacing: 0.04em;
+    }
+
+    .pipeline-diagram {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 1rem 1.25rem;
+    }
+
+    .pipe-step {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.73rem;
+      color: var(--body);
+      white-space: nowrap;
+      padding: 0.2rem 0;
+    }
+
+    .pipe-arrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.73rem;
+      color: var(--muted);
+      padding: 0 0.4rem;
+    }
+
+    .pipe-step.highlight { color: var(--accent); }
+
+    /* ── EXPERIENCE ── */
+    #experience { border-top: 1px solid var(--border); }
+
+    .timeline { position: relative; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -4px;
+      top: 0.45rem;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 2px solid var(--bg);
+    }
+
+    .timeline-item.current .timeline-dot {
+      background: var(--accent);
+    }
+
+    .timeline-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    .timeline-role {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.97rem;
+      font-weight: 500;
+      color: var(--head);
+    }
+
+    .timeline-period {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .timeline-company {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .timeline-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .timeline-bullets li {
+      font-size: 0.9rem;
+      color: var(--subtle);
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .timeline-bullets li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* ── SKILLS ── */
+    #skills { border-top: 1px solid var(--border); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .skill-group {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+
+    .skill-group-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .skill-item {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--body);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 0;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--subtle);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { gap: 1.25rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .project-title-row { flex-direction: column; }
+      .timeline-meta { flex-direction: column; gap: 0.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">ph</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-grid-bg"></div>
+      <div class="hero-glow"></div>
+      <div class="hero-inner">
+        <div class="hero-label">Analytics Engineer · Shanghai</div>
+        <h1>Phillip Haberman</h1>
+        <p class="hero-desc">
+          Five years in data and analytics at Cages Hospitality Group, covering
+          reporting, Python pipelines, BI, and internal application development.
+          Now focused on analytics engineering with dbt, Dagster, and BigQuery.
+        </p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#projects">See my work</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/phillip-haberman/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a class="btn btn-ghost" href="https://github.com/phaberman" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <div class="hero-stack">
+          <div class="stack-label">Core stack</div>
+          <div class="stack-pills">
+            <span class="pill">dbt Core</span>
+            <span class="pill">BigQuery</span>
+            <span class="pill">Dagster</span>
+            <span class="pill">GCS</span>
+            <span class="pill">Python</span>
+            <span class="pill">SQL</span>
+            <span class="pill">Looker Studio</span>
+            <span class="pill">GitHub</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">About</div>
+        <h2>Background</h2>
+      </div>
+      <div class="about-grid reveal">
+        <div class="about-text">
+          <p>
+            Five years as a Data Analyst in Shanghai's restaurant and hospitality industry,
+            doing work that steadily outgrew the title. Started with reporting and analysis,
+            then built local transformation pipelines, automated reporting with Metabase,
+            and designed the schema and backend for an internal HRM system using Django,
+            MySQL, and Docker.
+          </p>
+          <p>
+            The last year has been the most infrastructure-heavy: pipelines pulling from
+            multiple operational data sources, working directly against production databases,
+            and building systems designed for reliability and handoff. Currently formalizing
+            that experience with dbt, Dagster, BigQuery, and GCP through production-style
+            portfolio work.
+          </p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-number">5</div>
+            <div class="stat-desc">years in data & analytics</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">1</div>
+            <div class="stat-desc">end-to-end portfolio project</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Projects</div>
+        <h2>Projects</h2>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-header">
+          <div class="project-title-row">
+            <div class="project-name">retail-weather-pipeline</div>
+            <div class="project-links">
+              <a href="https://github.com/phaberman/retail-weather-pipeline" target="_blank" rel="noopener">GitHub ↗</a>
+              <a href="https://datastudio.google.com/u/0/reporting/dfe232e5-a51a-4d86-bcd0-42ad2e845942/page/U0NxF" target="_blank" rel="noopener">Dashboard ↗</a>
+            </div>
+          </div>
+          <p class="project-desc">
+            An end-to-end ELT pipeline for a hypothetical multi-city retailer needing to understand
+            how weather drives inventory demand variability across markets. Pulls daily weather data
+            for 5 US cities via the Open-Meteo API, lands raw JSON in GCS, loads to BigQuery,
+            transforms through dbt, orchestrates with Dagster, and surfaces insights in Looker Studio.
+          </p>
+        </div>
+        <div class="project-body">
+          <div class="project-tags">
+            <span class="tag">Python</span>
+            <span class="tag">dbt Core</span>
+            <span class="tag">BigQuery</span>
+            <span class="tag">GCS</span>
+            <span class="tag">Dagster</span>
+            <span class="tag">Looker Studio</span>
+            <span class="tag">Open-Meteo API</span>
+            <span class="tag">GCP</span>
+          </div>
+          <div class="pipeline-diagram">
+            <span class="pipe-step">Open-Meteo API</span>
+            <span class="pipe-arrow">→</span>
+            <span class="pipe-step">Python</span>
+            <span class="pipe-arrow">→</span>
+            <span class="pipe-step">GCS</span>
+            <span class="pipe-arrow">→</span>
+            <span class="pipe-step highlight">BigQuery raw</span>
+            <span class="pipe-arrow">→</span>
+            <span class="pipe-step highlight">dbt staging</span>
+            <span class="pipe-arrow">→</span>
+            <span class="pipe-step highlight">dbt marts</span>
+            <span class="pipe-arrow">→</span>
+            <span class="pipe-step">Looker Studio</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Experience</div>
+        <h2>Experience</h2>
+      </div>
+      <div class="timeline reveal">
+        <div class="timeline-item current">
+          <div class="timeline-dot"></div>
+          <div class="timeline-meta">
+            <div class="timeline-role">Data Analyst</div>
+            <div class="timeline-period">5 years · Restaurant &amp; Hospitality Industry</div>
+          </div>
+          <div class="timeline-company">Cages Hospitality Group</div>
+          <ul class="timeline-bullets">
+            <li>Started with Python analysis, Excel reporting, and ad-hoc data work</li>
+            <li>Built local Python transformation pipelines and automated reporting infrastructure using Metabase and SQL</li>
+            <li>Designed MySQL database schema and built internal tooling including an HRM system using Django and Docker, writing directly to a production MySQL database via CRUD operations</li>
+            <li>Moved into heavier pipeline work over the last year — pipelines pulling from multiple operational data sources and integrating external APIs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Skills</div>
+        <h2>The stack</h2>
+      </div>
+      <div class="skills-grid reveal">
+        <div class="skill-group">
+          <div class="skill-group-title">Transformation</div>
+          <div class="skill-list">
+            <span class="skill-item">dbt Core</span>
+            <span class="skill-item">SQL</span>
+            <span class="skill-item">data modeling</span>
+            <span class="skill-item">incremental patterns</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Cloud &amp; Storage</div>
+          <div class="skill-list">
+            <span class="skill-item">BigQuery</span>
+            <span class="skill-item">Google Cloud Storage</span>
+            <span class="skill-item">GCP</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Orchestration</div>
+          <div class="skill-list">
+            <span class="skill-item">Dagster</span>
+            <span class="skill-item">software-defined assets</span>
+            <span class="skill-item">pipeline scheduling</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Languages</div>
+          <div class="skill-list">
+            <span class="skill-item">Python</span>
+            <span class="skill-item">SQL</span>
+            <span class="skill-item">Jinja (dbt)</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Visualization</div>
+          <div class="skill-list">
+            <span class="skill-item">Looker Studio</span>
+            <span class="skill-item">Metabase</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Practices</div>
+          <div class="skill-list">
+            <span class="skill-item">ELT design</span>
+            <span class="skill-item">idempotency</span>
+            <span class="skill-item">schema testing</span>
+            <span class="skill-item">Git / GitHub</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="reveal">
+        <div class="section-label">Contact</div>
+        <h2>Get in touch</h2>
+        <p style="color: var(--subtle); margin-top: 1rem; margin-bottom: 2rem; max-width: 480px;">
+          Open to analytics engineering and data engineering roles. Best way to reach me is via LinkedIn.
+        </p>
+        <a class="btn btn-primary" href="https://www.linkedin.com/in/phillip-haberman/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/phillip-haberman/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/phaberman" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="footer-copy">Phillip Haberman · Analytics Engineer</div>
+  </footer>
+
+  <!-- SCROLL REVEAL -->
+  <script>
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
